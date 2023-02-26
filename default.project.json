@@ -3,16 +3,8 @@
   "tree": {
     "$className": "DataModel",
     "ReplicatedStorage": {
-      "Source": {
-        "$path": "src/ReplicatedStorage"
-      },
       "Packages": {
         "$path": "Packages"
-      }
-    },
-    "ServerScriptService": {
-      "Source": {
-        "$path": "src/ServerScriptService"
       }
     },
     "StarterPlayer": {
@@ -20,12 +12,6 @@
         "Source": {
           "$path": "src/StarterPlayerScripts"
         }
-      }
-    },
-
-    "ServerStorage": {
-      "Source": {
-        "$path": "src/ServerStorage"
       }
     }
   }
