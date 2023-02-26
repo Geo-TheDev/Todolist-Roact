@@ -1,5 +1,6 @@
-# Project place file
-/RojoTemplate.rbxlx
+# Place files
+*.rbxlx
+*.rbxl
 
 # Roblox Studio lock files
 /*.rbxlx.lock
