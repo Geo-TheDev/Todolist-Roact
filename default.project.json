@@ -3,15 +3,16 @@
   "tree": {
     "$className": "DataModel",
     "ReplicatedStorage": {
+      "Gui": {
+        "$path": "src/Gui"
+      },
       "Packages": {
         "$path": "Packages"
       }
     },
     "StarterPlayer": {
       "StarterPlayerScripts": {
-        "Source": {
-          "$path": "src/StarterPlayerScripts"
-        }
+        "$path": "src/StarterPlayerScripts"
       }
     }
   }
