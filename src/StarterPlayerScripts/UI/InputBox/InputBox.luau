@@ -59,7 +59,7 @@ local function Inputbox(props, hooks)
 			backgroundColor3 = Color3.fromRGB(126, 240, 103),
 			text = "Submit",
 			onActivated = function()
-				props.callback(text)
+				props.onActivated(text)
 			end,
 		}),
 	})

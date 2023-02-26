@@ -98,8 +98,8 @@ local function Todolist(props, hooks)
 				local app
 				local UI = e("ScreenGui", { ResetOnSpawn = false }, {
 					UI = e(InputBox, {
-						TitleText = "Create!",
-						Callback = function(text)
+						titleText = "Create!",
+						onActivated = function(text)
 							local newTodos = todos
 							newTodos[#newTodos + 1] = { Text = text, Checked = false }
 
