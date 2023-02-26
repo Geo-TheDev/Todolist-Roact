@@ -7,6 +7,7 @@ local ToDoList = require(ReplicatedStorage.Gui.App.ToDoList)
 
 local app = e("ScreenGui", {
 	ResetOnSpawn = false,
+	IgnoreGuiInset = true
 }, {
 	ToDoList = e(ToDoList, {}),
 })
