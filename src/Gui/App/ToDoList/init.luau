@@ -3,46 +3,54 @@ local Roact = require(ReplicatedStorage.Packages.Roact)
 local Hooks = require(ReplicatedStorage.Packages.Hooks)
 
 local App = ReplicatedStorage.Gui.App
-local Todo = require(App.ToDoList.ToDo)
+local ToDo = require(App.ToDoList.ToDo)
 
 local Components = ReplicatedStorage.Gui.Components
+local Modal = require(Components.Modal)
 local Button = require(Components.Button)
 local InputBox = require(Components.InputBox)
 
 local e = Roact.createElement
 
-local function ToDoList(props, hooks)
-	local todos, setTodos = hooks.useState({})
-	local visible, setVisible = hooks.useState(true)
+local function TaskFragment(props)
+	local elements = {}
 
-	local function addTodos()
-		local _todos = {}
-
-		for i, v in pairs(todos) do
-			_todos[i] = e(Todo, {
-				onCheckboxActivated = function(checked)
-					todos[i].Checked = checked
-				end,
-				checked = v.Checked,
-				text = v.Text,
-			})
-		end
-
-		return Roact.createFragment(_todos)
+	for i, task in props.tasks do
+		elements[i .. "_" .. task.Text] = e(ToDo, {
+			onCheckboxActivated = function(checked)
+				task.Checked = checked
+			end,
+			checked = task.Checked,
+			text = task.Text,
+		})
 	end
 
-	local function clearFinished()
-		local unchecked = {}
+	return Roact.createFragment(elements)
+end
 
-		for _, v in ipairs(todos) do
-			if v.Checked == false then
-				table.insert(unchecked, v)
+local function ToDoList(props, hooks)
+	local toDos, setToDos = hooks.useState({})
+	local visible, setVisible = hooks.useState(true)
+	local addingNewTask, setAddingNewTask = hooks.useState(false)
+
+	local addNewTask = hooks.useCallback(function(text)
+		setToDos(function(currentTasks)
+			table.insert(currentTasks, { Text = text, Checked = false })
+			return currentTasks
+		end)
+	end, { setToDos })
+
+	local clearFinished = hooks.useCallback(function()
+		local unChecked = {}
+
+		for _, task in toDos do
+			if not task.Checked then
+				table.insert(unChecked, task)
 			end
 		end
 
-		setTodos({})
-		setTodos(unchecked)
-	end
+		setToDos(unChecked)
+	end, { toDos })
 
 	return e("Frame", {
 		AnchorPoint = Vector2.new(0.5, 0.5),
@@ -68,7 +76,9 @@ local function ToDoList(props, hooks)
 				Padding = UDim.new(0, 5),
 				HorizontalAlignment = Enum.HorizontalAlignment.Center,
 			}),
-			addTodos(),
+			Tasks = e(TaskFragment, {
+				tasks = toDos,
+			}),
 		}),
 
 		Clear = e(Button, {
@@ -85,7 +95,7 @@ local function ToDoList(props, hooks)
 			size = UDim2.fromScale(0.45, 0.15),
 			text = "Clear All",
 			onActivated = function()
-				setTodos({})
+				setToDos({})
 			end,
 		}),
 
@@ -96,28 +106,23 @@ local function ToDoList(props, hooks)
 			backgroundColor3 = Color3.fromRGB(126, 240, 103),
 			onActivated = function()
 				setVisible(false)
-
-				local app
-				local UI = e("ScreenGui", { ResetOnSpawn = false }, {
-					UI = e(InputBox, {
-						titleText = "Create!",
-						onActivated = function(text)
-							local newTodos = todos
-							newTodos[#newTodos + 1] = { Text = text, Checked = false }
-
-							setTodos(newTodos)
-							setVisible(true)
-
-							if app == nil then
-								return
-							end
-							Roact.unmount(app)
-						end,
-					}),
-				})
-
-				app = Roact.mount(UI, game.Players.LocalPlayer.PlayerGui, "InputBox")
+				setAddingNewTask(true)
 			end,
+		}),
+
+		AddNewTaskModal = e(Modal, {
+			name = "AddNewTaskModal",
+		}, {
+			InputBox = if addingNewTask
+				then e(InputBox, {
+					titleText = "Create!",
+					onActivated = function(text)
+						addNewTask(text)
+						setAddingNewTask(false)
+						setVisible(true)
+					end,
+				})
+				else nil,
 		}),
 
 		AspectRatio = e("UIAspectRatioConstraint", {
