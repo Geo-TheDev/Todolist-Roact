@@ -2,14 +2,16 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Roact = require(ReplicatedStorage.Packages.Roact)
 local Hooks = require(ReplicatedStorage.Packages.Hooks)
 
-local Components = script.Parent.Parent.Components
-local Todo = require(script.Parent.Todo)
+local App = ReplicatedStorage.Gui.App
+local Todo = require(App.ToDoList.ToDo)
+
+local Components = ReplicatedStorage.Gui.Components
 local Button = require(Components.Button)
-local InputBox = require(script.Parent.Parent.InputBox.InputBox)
+local InputBox = require(Components.InputBox)
 
 local e = Roact.createElement
 
-local function Todolist(props, hooks)
+local function ToDoList(props, hooks)
 	local todos, setTodos = hooks.useState({})
 	local visible, setVisible = hooks.useState(true)
 
@@ -126,4 +128,4 @@ local function Todolist(props, hooks)
 	})
 end
 
-return Hooks.new(Roact)(Todolist)
+return Hooks.new(Roact)(ToDoList)

@@ -2,7 +2,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Roact = require(ReplicatedStorage.Packages.Roact)
 local Hooks = require(ReplicatedStorage.Packages.Hooks)
 
-local Components = script.Parent.Parent.Components
+local Components = ReplicatedStorage.Gui.Components
 local Button = require(Components.Button)
 
 local e = Roact.createElement

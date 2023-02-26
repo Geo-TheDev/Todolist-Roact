@@ -4,7 +4,7 @@ local Hooks = require(ReplicatedStorage.Packages.Hooks)
 
 local e = Roact.createElement
 
-local function Todo(props, hooks)
+local function ToDo(props, hooks)
 	local checked, setChecked = hooks.useState(props.checked)
 	local text, setText = hooks.useState("")
 
@@ -60,4 +60,4 @@ local function Todo(props, hooks)
 	})
 end
 
-return Hooks.new(Roact)(Todo)
+return Hooks.new(Roact)(ToDo)
